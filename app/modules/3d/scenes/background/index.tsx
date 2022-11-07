@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Line, OrbitControls } from "@react-three/drei";
+import { Line, OrbitControls, Stats } from "@react-three/drei";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import {
 	Bloom,
@@ -13,14 +13,15 @@ import {
 export function Background() {
 	return (
 		<div className="fixed top-0 bottom-0 right-0 left-0">
-			<Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 20] }}>
-				<fog attach="fog" color="#090a12" near={1} far={150} />
+			<Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 2] }}>
+				<Stats />
+				<fog attach="fog" color="#090a12" near={1} far={200} />
 				<color attach="background" args={["#090a12"]} />
 				<ambientLight intensity={1} />
-				<OrbitControls rotation={[0, Math.PI / 2, 0]} />
+				<OrbitControls />
 				<Curves />
 				<EffectComposer>
-					<Scanline opacity={.05} />
+					<Scanline opacity={0.05} />
 					<Bloom
 						intensity={0.7}
 						luminanceThreshold={0}
@@ -28,41 +29,58 @@ export function Background() {
 					/>
 					<ChromaticAberration />
 				</EffectComposer>
+				<Line
+					points={new THREE.CatmullRomCurve3([
+						new THREE.Vector3(0, 0, 0),
+						new THREE.Vector3(30, 0, 0),
+					]).getPoints(2)}
+					color="blue"
+				/>
+				<Line
+					points={new THREE.CatmullRomCurve3([
+						new THREE.Vector3(0, 0, 0),
+						new THREE.Vector3(0, 30, 0),
+					]).getPoints(2)}
+					color="red"
+				/>
+				<Line
+					points={new THREE.CatmullRomCurve3([
+						new THREE.Vector3(0, 0, 0),
+						new THREE.Vector3(0, 0, 30),
+					]).getPoints(2)}
+					color="green"
+				/>
 			</Canvas>
 		</div>
 	);
 }
 
 function createCurve() {
-	function randomClamp(floor: number, ceiling: number) {
-		return Math.random() * (ceiling - floor) + floor;
-	}
 	return new THREE.CatmullRomCurve3([
-		new THREE.Vector3(randomClamp(5, 30), randomClamp(10, -30), -25),
-		new THREE.Vector3(
-			randomClamp(0, 20),
-			randomClamp(0, 20),
-			randomClamp(10, 30)
-		),
-		new THREE.Vector3(
-			randomClamp(-10, 20),
-			randomClamp(0, 20),
-			randomClamp(50, 80)
-		),
-		new THREE.Vector3(
-			randomClamp(-40, 30),
-			randomClamp(-20, -40),
-			randomClamp(210, 230)
-		),
-		new THREE.Vector3(
-			randomClamp(-100, 100),
-			randomClamp(50, 100),
-			randomClamp(-200, 220)
-		),
-	]);
+		new THREE.Vector3(randomClamp(-15, -25), randomClamp(3, -25), 20),
+		new THREE.Vector3(randomClamp(0, 100), randomClamp(20, 70), -100),
+		new THREE.Vector3(randomClamp(100,200), randomClamp(-30,30), -240),
+	])
+}
+function randomClamp(floor: number, ceiling: number) {
+	return Math.random() * (ceiling - floor) + floor;
 }
 
-const curveArray = Array.from(Array(10)).map(() => createCurve());
+const curveArray = Array.from(Array(20)).map(() => createCurve());
+
+new THREE.CatmullRomCurve3([
+	new THREE.Vector3(-20, -10, 20),
+	new THREE.Vector3(75, 50, -100),
+	new THREE.Vector3(150, 0, -240),
+])
+
+// const curveArray = [
+// 	new THREE.CatmullRomCurve3([
+// 		new THREE.Vector3(randomClamp(-15, -25), randomClamp(-5, -15), 20),
+// 		new THREE.Vector3(75, 50, -100),
+// 		new THREE.Vector3(randomClamp(130,170), randomClamp(-20,20), -240),
+// 	]),
+// ];
 
 function Curves() {
 	return (
@@ -77,7 +95,7 @@ function Curves() {
 function Curve({ curve }: { curve: THREE.CatmullRomCurve3 }) {
 	return (
 		<>
-			<Line points={curve.getPoints(100)} color="#fff" lineWidth={1} />
+			{/* <Line points={curve.getPoints(100)} color="#fff" lineWidth={1} /> */}
 			{Array.from(Array(60)).map((_, i) => (
 				<CubeObj curve={curve} />
 			))}
@@ -85,23 +103,21 @@ function Curve({ curve }: { curve: THREE.CatmullRomCurve3 }) {
 	);
 }
 
-const base = new THREE.BoxGeometry(1, 1, 1);
+const base = new THREE.BoxGeometry(.5, .5, .5);
 
 function CubeObj({ curve }: { curve: THREE.CatmullRomCurve3 }) {
-
-	const cube = useMemo(()=>{
+	const cube = useMemo(() => {
 		// const mesh = new THREE.Mesh(
 		// 	new THREE.BoxGeometry(1, 1, 1),
 		// 	new THREE.MeshBasicMaterial({ color: "cyan", opacity: 1 })
 		// )
-		const mesh = new THREE.Mesh()
+		const mesh = new THREE.Mesh();
 		const wireframeGeo = new THREE.EdgesGeometry(base);
-		const wireframeMat = new THREE.LineBasicMaterial({ color: 'cyan'});
+		const wireframeMat = new THREE.LineBasicMaterial({ color: "cyan" });
 		const wireframe = new THREE.LineSegments(wireframeGeo, wireframeMat);
-		mesh.add( wireframe );
-		return mesh
-	}, [])
-
+		mesh.add(wireframe);
+		return mesh;
+	}, []);
 
 	// On mount, set the position of the cube to a random spot on the curve
 	const t = useRef(Math.random());
