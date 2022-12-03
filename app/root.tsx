@@ -11,6 +11,7 @@ import { Background } from "~/modules/3d/scenes/background";
 import reset from '@unocss/reset/tailwind.css'
 import unocss from '~/styles/uno.css'
 import { Client } from "./common/components/Client";
+import { OuterHUD } from "./modules/OuterHUD";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -31,10 +32,11 @@ export default function App() {
         <Links />
       </head>
       <body className='relative'>
-        <Outlet />
+        <OuterHUD />
         <Client>
           <Background />
         </Client>
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

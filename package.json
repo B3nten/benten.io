@@ -4,8 +4,9 @@
   "scripts": {
     "build": "npm run build:css && remix build",
     "build:css": "unocss './app/**/*.{ts,tsx}' './app/utils/unified/**/*.js' -o ./app/styles/uno.css",
-    "dev": "node -r dotenv/config node_modules/.bin/remix dev",
-    "dev:css": "unocss './app/**/*.{ts,tsx}' './app/utils/unified/**/*.js' -o ./app/styles/uno.css --watch"
+    "dev:remix": "node -r dotenv/config node_modules/.bin/remix dev",
+    "dev:css": "unocss './app/**/*.{ts,tsx}' './app/utils/unified/**/*.js' -o ./app/styles/uno.css --watch",
+    "dev": "npm-run-all --parallel dev:*"
   },
   "dependencies": {
     "@netlify/functions": "^1.0.0",
@@ -18,9 +19,11 @@
     "@unocss/preset-wind": "^0.46.3",
     "@unocss/reset": "^0.46.3",
     "cross-env": "^7.0.3",
+    "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.146.0"
+    "three": "^0.146.0",
+    "three-stdlib": "^2.20.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.7.4",
@@ -29,6 +32,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/three": "^0.144.0",
+    "@unocss/preset-web-fonts": "^0.47.5",
     "eslint": "^8.23.1",
     "typescript": "^4.7.4",
     "unocss": "^0.46.3"
