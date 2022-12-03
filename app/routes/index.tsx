@@ -7,7 +7,7 @@ import { AboutModel } from "~/modules/3d/models/AboutModel";
 export default function Index() {
 	return (
 		<div className="w-full h-screen flex items-center justify-center">
-			<div className="relative h-70vh aspect-square rounded-full border border-cyan">
+			<div className="relative h-50vh aspect-square rounded-full border border-cyan">
 				<a
 					href="https://github.com/b3nten"
 					className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2"

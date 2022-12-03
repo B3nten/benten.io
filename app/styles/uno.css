@@ -33,8 +33,8 @@
 .z-999{z-index:999;}
 .block{display:block;}
 .aspect-square{aspect-ratio:1/1;}
+.h-50vh{height:50vh;}
 .h-64{height:16rem;}
-.h-70vh{height:70vh;}
 .h-screen{height:100vh;}
 .w-64{width:16rem;}
 .w-full{width:100%;}

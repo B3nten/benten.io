@@ -26,6 +26,7 @@ import {
 import { UnrealBloomPass } from "three-stdlib";
 import { GithubModel } from "../../models/GithubModel";
 import { TextureLoader } from "three";
+import { useSpring, animated } from 'react-spring'
 
 extend({ UnrealBloomPass });
 
@@ -34,6 +35,28 @@ function Gradient(){
 	const texture = useLoader(TextureLoader, "images/gradient.jpg");
 	texture.encoding = THREE.sRGBEncoding;
 	scene.background = texture;
+	return <></>
+}
+
+function CameraControls(){
+	const mouse = useRef([0,0])
+	const [mousePos, mousePosAPI] = useSpring(() => ({ x: 0, y: 0, config: { mass: 1, tension: 100, friction: 100 } }))
+	useEffect(() => {
+		function handleMouseMove(e: MouseEvent){
+			const x = (e.clientX - (.5*window.innerWidth)) / (.5*window.innerWidth);
+			const y = (e.clientY - (.5*window.innerHeight)) / (.5*window.innerHeight) * -1
+			mouse.current = [x, y]
+			mousePosAPI.start({ x, y })
+		}
+		window.addEventListener("mousemove", handleMouseMove)
+		return () => {window.removeEventListener("mousemove", handleMouseMove)}
+	})
+	const { camera } = useThree();
+	useFrame((_, t) => {
+		// rotate camera with max bounds
+		camera.rotation.x = Math.max(Math.min(mousePos.y.get() * .3, Math.PI/2), -Math.PI/2)
+		camera.rotation.y = Math.max(Math.min(-mousePos.x.get() * .4, Math.PI/2), -Math.PI/2)
+	})
 	return <></>
 }
 
@@ -46,10 +69,11 @@ export function Background() {
 				<ambientLight intensity={1} />
 				<Gradient />
 				{/* <FirstPersonControls lookSpeed={0.04} /> */}
-				<OrbitControls />
+				<CameraControls />
+				{/* <OrbitControls /> */}
 				<Curves />
 				<EffectComposer>
-					<Scanline opacity={0.08} />
+					<Scanline opacity={0.5} />
 					<Bloom intensity={0.1} luminanceThreshold={1} />
 					<ChromaticAberration />
 				</EffectComposer>

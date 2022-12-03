@@ -1,11 +1,12 @@
 import { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import { Cloud, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import {
 	Bloom,
 	ChromaticAberration,
 	EffectComposer,
+	Pixelation,
 } from "@react-three/postprocessing";
 
 export function GithubModel() {
@@ -14,6 +15,7 @@ export function GithubModel() {
 	useFrame(() => {
 		meshRef.current.rotation.y -= 0.004;
 	});
+	const mouse = useRef([0,0])
 	return (
 		<>
 			<EffectComposer>
