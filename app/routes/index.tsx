@@ -1,6 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { GithubModel } from "~/modules/3d/models/GithubModel";
 import { BlogModel } from "~/modules/3d/models/BlogModel";
+import { ArtstationModel } from "~/modules/3d/models/ArtstationModel";
+import { AboutModel } from "~/modules/3d/models/AboutModel";
 
 export default function Index() {
 	return (
@@ -44,11 +46,11 @@ export default function Index() {
 						<Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
 							<ambientLight />
 							<pointLight position={[0, 10, 0]} />
-							<GithubModel />
+							<AboutModel />
 						</Canvas>
 					</div>
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
-						github
+						about
 					</div>
 				</a>
 				<a
@@ -59,11 +61,11 @@ export default function Index() {
 						<Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
 							<ambientLight />
 							<pointLight position={[0, 10, 0]} />
-							<GithubModel />
+							<ArtstationModel />
 						</Canvas>
 					</div>
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
-						github
+						artstation
 					</div>
 				</a>
 			</div>

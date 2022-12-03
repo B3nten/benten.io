@@ -1,11 +1,18 @@
 import * as THREE from "three";
-import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
+import {
+	Canvas,
+	useFrame,
+	useThree,
+	extend,
+	useLoader,
+} from "@react-three/fiber";
 import {
 	FirstPersonControls,
 	Line,
 	OrbitControls,
 	Stats,
 	Effects,
+	GradientTexture,
 } from "@react-three/drei";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
@@ -18,23 +25,32 @@ import {
 
 import { UnrealBloomPass } from "three-stdlib";
 import { GithubModel } from "../../models/GithubModel";
+import { TextureLoader } from "three";
 
 extend({ UnrealBloomPass });
 
+function Gradient(){
+	const { scene } = useThree();
+	const texture = useLoader(TextureLoader, "images/gradient.jpg");
+	texture.encoding = THREE.sRGBEncoding;
+	scene.background = texture;
+	return <></>
+}
+
 export function Background() {
 	return (
-		<div className="fixed top-0 bottom-0 right-0 left-0 -z-10">
+		<div className="fixed top-0 bottom-0 right-0 left-0 -z-10 bg-#090a12">
 			<Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 2] }}>
 				{/* <Stats /> */}
 				<fog attach="fog" color="#090a12" near={1} far={200} />
-				<color attach="background" args={["#090a12"]} />
 				<ambientLight intensity={1} />
+				<Gradient />
 				{/* <FirstPersonControls lookSpeed={0.04} /> */}
 				<OrbitControls />
 				<Curves />
 				<EffectComposer>
-					<Scanline opacity={0.06} />
-					<Bloom intensity={.1} luminanceThreshold={1}/>
+					<Scanline opacity={0.08} />
+					<Bloom intensity={0.1} luminanceThreshold={1} />
 					<ChromaticAberration />
 				</EffectComposer>
 			</Canvas>
@@ -59,7 +75,7 @@ const base = new THREE.SphereGeometry(0.05, 12, 12);
 const instancedMesh = new THREE.InstancedMesh(
 	base,
 	new THREE.MeshBasicMaterial({
-		color: new THREE.Color(.5, 4, 4),
+		color: new THREE.Color(0.5, 4, 4),
 		toneMapped: false,
 	}),
 	1000
@@ -72,7 +88,10 @@ function Curves() {
 		<>
 			{curveArray.map((curve, i) => {
 				const cubeAmount = instancedMesh.count / curveArray.length;
-				const range: [number, number] = [(cubeAmount - 1) * i, cubeAmount * (i + 1)];
+				const range: [number, number] = [
+					(cubeAmount - 1) * i,
+					cubeAmount * (i + 1),
+				];
 				return (
 					<Curve key={JSON.stringify(curve)} curve={curve} range={range} />
 				);

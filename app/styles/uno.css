@@ -51,6 +51,7 @@
 .border{border-width:1px;border-style:solid;}
 .border-cyan{--un-border-opacity:1;border-color:rgba(34,211,238,var(--un-border-opacity));}
 .rounded-full{border-radius:9999px;}
+.bg-\#090a12{--un-bg-opacity:1;background-color:rgba(9,10,18,var(--un-bg-opacity));}
 .text-center{text-align:center;}
 .font-mono{font-family:"VT323",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
 .text-2xl{font-size:1.5rem;line-height:2rem;}

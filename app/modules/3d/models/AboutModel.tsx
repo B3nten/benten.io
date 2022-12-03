@@ -8,8 +8,8 @@ import {
 	EffectComposer,
 } from "@react-three/postprocessing";
 
-export function GithubModel() {
-	const { nodes } = useGLTF("/models/github.gltf");
+export function AboutModel() {
+	const { nodes } = useGLTF("/models/about.gltf");
 	const meshRef = useRef();
 	useFrame(() => {
 		meshRef.current.rotation.y -= 0.004;
@@ -17,8 +17,8 @@ export function GithubModel() {
 	return (
 		<>
 			<EffectComposer>
-				<Bloom intensity={.3} luminanceThreshold={0} />
-				<ChromaticAberration offset={new THREE.Vector2(.005,0)} />
+				<Bloom intensity={0.3} luminanceThreshold={0} />
+				<ChromaticAberration offset={new THREE.Vector2(0.005, 0)} />
 			</EffectComposer>
 			<group ref={meshRef} dispose={null}>
 				<mesh castShadow receiveShadow geometry={nodes.Mesh.geometry}>
@@ -29,4 +29,4 @@ export function GithubModel() {
 	);
 }
 
-useGLTF.preload("/models/github.gltf");
+useGLTF.preload("/models/about.gltf");
