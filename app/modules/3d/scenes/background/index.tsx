@@ -26,38 +26,118 @@ import {
 import { UnrealBloomPass } from "three-stdlib";
 import { GithubModel } from "../../models/GithubModel";
 import { TextureLoader } from "three";
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated } from "react-spring";
+import Random from "canvas-sketch-util/random";
 
 extend({ UnrealBloomPass });
 
-function Gradient(){
+function Gradient() {
 	const { scene } = useThree();
 	const texture = useLoader(TextureLoader, "images/gradient.jpg");
 	texture.encoding = THREE.sRGBEncoding;
 	scene.background = texture;
-	return <></>
+	return <></>;
 }
 
-function CameraControls(){
-	const mouse = useRef([0,0])
-	const [mousePos, mousePosAPI] = useSpring(() => ({ x: 0, y: 0, config: { mass: 1, tension: 100, friction: 100 } }))
+function CameraControls() {
+	const mouse = useRef([0, 0]);
+	const [mousePos, mousePosAPI] = useSpring(() => ({
+		x: 0,
+		y: 0,
+		config: { mass: 1, tension: 100, friction: 100 },
+	}));
 	useEffect(() => {
-		function handleMouseMove(e: MouseEvent){
-			const x = (e.clientX - (.5*window.innerWidth)) / (.5*window.innerWidth);
-			const y = (e.clientY - (.5*window.innerHeight)) / (.5*window.innerHeight) * -1
-			mouse.current = [x, y]
-			mousePosAPI.start({ x, y })
+		function handleMouseMove(e: MouseEvent) {
+			const x =
+				(e.clientX - 0.5 * window.innerWidth) / (0.5 * window.innerWidth);
+			const y =
+				((e.clientY - 0.5 * window.innerHeight) / (0.5 * window.innerHeight)) *
+				-1;
+			mouse.current = [x, y];
+			mousePosAPI.start({ x, y });
 		}
-		window.addEventListener("mousemove", handleMouseMove)
-		return () => {window.removeEventListener("mousemove", handleMouseMove)}
-	})
+		window.addEventListener("mousemove", handleMouseMove);
+		return () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+		};
+	});
 	const { camera } = useThree();
 	useFrame((_, t) => {
 		// rotate camera with max bounds
-		camera.rotation.x = Math.max(Math.min(mousePos.y.get() * .3, Math.PI/2), -Math.PI/2)
-		camera.rotation.y = Math.max(Math.min(-mousePos.x.get() * .4, Math.PI/2), -Math.PI/2)
-	})
-	return <></>
+		camera.rotation.x = Math.max(
+			Math.min(mousePos.y.get() * 0.3, Math.PI / 2),
+			-Math.PI / 2
+		);
+		camera.rotation.y = Math.max(
+			Math.min(-mousePos.x.get() * 0.4, Math.PI / 2),
+			-Math.PI / 2
+		);
+	});
+	return <></>;
+}
+
+export function Dust({ count }: { count: number }) {
+	const mesh = useRef();
+	const light = useRef();
+
+	// Generate some random positions, speed factors and timings
+	const particles = useMemo(() => {
+		const temp = [];
+		for (let i = 0; i < count; i++) {
+			const time = Random.range(0, 100);
+			const factor = Random.range(20, 120);
+			const speed = Random.range(0.005, 0.008) / 2;
+			const x = Random.range(-50, 50);
+			const y = Random.range(-50, 50);
+			const z = Random.range(-50, 50);
+
+			temp.push({ time, factor, speed, x, y, z });
+		}
+		return temp;
+	}, [count]);
+
+	const dummy = useMemo(() => new THREE.Object3D(), []);
+
+	useFrame(() => {
+		// Run through the randomized data to calculate some movement
+		particles.forEach((particle, index) => {
+			let { factor, speed, x, y, z } = particle;
+
+			// Update the particle time
+			const t = (particle.time += speed);
+
+			// Update the particle position based on the time
+			// This is mostly random trigonometry functions to oscillate around the (x, y, z) point
+			dummy.position.set(
+				x + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
+				y + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
+				z + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
+			);
+
+			// Derive an oscillating value which will be used
+			// for the particle size and rotation
+			const s = Math.cos(t);
+			dummy.scale.set(s, s, s);
+			dummy.rotation.set(s * 5, s * 5, s * 5);
+			dummy.updateMatrix();
+
+			// And apply the matrix to the instanced item
+			mesh.current.setMatrixAt(index, dummy.matrix);
+		});
+		mesh.current.instanceMatrix.needsUpdate = true;
+	});
+
+	return (
+		<>
+			<instancedMesh ref={mesh} args={[null, null, count]}>
+				<dodecahedronBufferGeometry args={[0.05, 0]} />
+				<meshBasicMaterial
+					toneMapped={false}
+					color={new THREE.Color(0.5, 4, 4)}
+				/>
+			</instancedMesh>
+		</>
+	);
 }
 
 export function Background() {
@@ -68,9 +148,8 @@ export function Background() {
 				<fog attach="fog" color="#090a12" near={1} far={200} />
 				<ambientLight intensity={1} />
 				<Gradient />
-				{/* <FirstPersonControls lookSpeed={0.04} /> */}
+				<Dust count={300} />
 				<CameraControls />
-				{/* <OrbitControls /> */}
 				<Curves />
 				<EffectComposer>
 					<Scanline opacity={0.5} />
@@ -158,7 +237,7 @@ function CubeInstance({
 	}, []);
 
 	useFrame((state, delta) => {
-		t.current += delta * 0.025;
+		t.current += delta * 0.05;
 		if (t.current > 1) {
 			t.current = 0;
 		}

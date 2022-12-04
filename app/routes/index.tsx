@@ -1,15 +1,26 @@
 import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { GithubModel } from "~/modules/3d/models/GithubModel";
 import { BlogModel } from "~/modules/3d/models/BlogModel";
 import { ArtstationModel } from "~/modules/3d/models/ArtstationModel";
 import { AboutModel } from "~/modules/3d/models/AboutModel";
+import { Link } from "@remix-run/react";
+
 
 export default function Index() {
 	return (
 		<div className="w-full h-screen flex items-center justify-center">
 			<div className="relative h-50vh aspect-square rounded-full border border-cyan">
-				<a
-					href="https://github.com/b3nten"
+				<Canvas>
+					<OrbitControls></OrbitControls>
+					<ambientLight intensity={0.5} />
+					<pointLight position={[10, 10, 10]} />
+					<mesh>
+						<torusGeometry args={[3, .6, 16, 100]} />
+					</mesh>
+				</Canvas>
+				<Link
+					to="/blog"
 					className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2"
 				>
 					<div className="w-64 h-64">
@@ -22,7 +33,7 @@ export default function Index() {
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
 						blog
 					</div>
-				</a>
+				</Link>
 				<a
 					href="https://github.com/b3nten"
 					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2"
