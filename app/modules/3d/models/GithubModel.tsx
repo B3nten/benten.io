@@ -15,12 +15,16 @@ export function GithubModel() {
 	useFrame(() => {
 		meshRef.current.rotation.y -= 0.004;
 	});
-	const mouse = useRef([0,0])
+	const time = useRef(0);
+	useFrame(() => {
+		time.current += 0.01;
+	});
+	const mouse = useRef([0, 0]);
 	return (
 		<>
 			<EffectComposer>
-				<Bloom intensity={.3} luminanceThreshold={0} />
-				<ChromaticAberration offset={new THREE.Vector2(.005,0)} />
+				<Bloom intensity={0.3} luminanceThreshold={0} />
+				<ChromaticAberration offset={new THREE.Vector2(0.005, 0)} />
 			</EffectComposer>
 			<group ref={meshRef} dispose={null}>
 				<mesh castShadow receiveShadow geometry={nodes.Mesh.geometry}>

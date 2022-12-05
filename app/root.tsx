@@ -9,7 +9,7 @@ import {
 	useLocation,
 	useOutlet,
 } from "@remix-run/react";
-import { Background } from "~/modules/3d/scenes/background";
+import { Scene } from "~/modules/3d/scenes/background";
 import reset from "@unocss/reset/tailwind.css";
 import unocss from "~/styles/uno.css";
 import { Client } from "./common/components/Client";
@@ -45,7 +45,7 @@ export default function App() {
 			<body className="relative">
 				<OuterHUD />
 				<Client>
-					<Background />
+					<Scene />
 				</Client>
 				{transitions((props, Outlet) => (
 					<animated.div style={props}>{Outlet}</animated.div>
