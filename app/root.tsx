@@ -9,12 +9,14 @@ import {
 	useLocation,
 	useOutlet,
 } from "@remix-run/react";
-import { Scene } from "~/modules/3d/scenes/background";
+import { Scene } from "~/modules/3d/background";
 import reset from "@unocss/reset/tailwind.css";
 import unocss from "~/styles/uno.css";
+import blog from "~/styles/blog.css";
 import { Client } from "./common/components/Client";
 import { OuterHUD } from "./modules/OuterHUD";
-import { useTransition, animated, config } from "react-spring";
+import { useTransition, animated, config } from "@react-spring/web";
+import { useMemo } from "react";
 
 export const meta: MetaFunction = () => ({
 	charset: "utf-8",
@@ -25,31 +27,36 @@ export const meta: MetaFunction = () => ({
 export const links = () => [
 	{ rel: "stylesheet", href: reset },
 	{ rel: "stylesheet", href: unocss },
+	{ rel: "stylesheet", href: blog },
 ];
 
 export default function App() {
-	const outlet = useOutlet();
-	const transitions = useTransition(outlet, {
-		from: { opacity: 0, config: { duration: 1000 } },
-		enter: { opacity: 1, config: { duration: 1000 } },
-		leave: { opacity: 0, config: { duration: 1000 } },
-    delay: 0,
+	const outlet = useOutlet()
+	const { pathname } = useLocation()
+	const outletMemo = useMemo(() => {
+		return outlet
+	}, [pathname])
+	const transitions = useTransition(outletMemo, {
+		from: { opacity: 0, config: { duration: 500 } },
+		enter: { opacity: 1, config: { duration: 500 } },
+		leave: { opacity: 0, config: { duration: 500 } },
+		delay: 0,
 		exitBeforeEnter: true,
-	})
+	});
 	return (
 		<html lang="en" data-theme="dark">
 			<head>
 				<Meta />
 				<Links />
 			</head>
-			<body className="relative">
+			<body className="relative bg-black">
 				<OuterHUD />
 				<Client>
 					<Scene />
 				</Client>
-				{transitions((props, Outlet) => (
+				{/* {transitions((props, Outlet) => 
 					<animated.div style={props}>{Outlet}</animated.div>
-				))}
+				)} */}
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />

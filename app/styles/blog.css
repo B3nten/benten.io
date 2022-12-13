@@ -1,0 +1,11 @@
+.prose  a{
+	color:cyan
+}
+
+.prose h2,h4{
+	color:cyan
+}
+
+.prose h3,h5{
+	color: fuchsia
+}

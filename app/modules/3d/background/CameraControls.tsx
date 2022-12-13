@@ -3,7 +3,7 @@ import {
 	useThree
 } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { useSpring } from "react-spring";
+import { useSpring } from "@react-spring/web";
 
 export function CameraControls() {
 	const mouse = useRef([0, 0]);

@@ -16,11 +16,11 @@ export default function Index() {
 					className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2"
 				>
 					<div className="w-64 h-64">
-						<Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
+						{/* <Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
 							<ambientLight />
 							<pointLight position={[0, 10, 0]} />
 							<BlogModel />
-						</Canvas>
+						</Canvas> */}
 					</div>
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
 						blog
@@ -31,11 +31,11 @@ export default function Index() {
 					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2"
 				>
 					<div className="w-64 h-64">
-						<Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
+						{/* <Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
 							<ambientLight />
 							<pointLight position={[0, 10, 0]} />
 							<GithubModel />
-						</Canvas>
+						</Canvas> */}
 					</div>
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
 						github
@@ -46,11 +46,11 @@ export default function Index() {
 					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2"
 				>
 					<div className="w-64 h-64">
-						<Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
+						{/* <Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
 							<ambientLight />
 							<pointLight position={[0, 10, 0]} />
 							<AboutModel />
-						</Canvas>
+						</Canvas> */}
 					</div>
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
 						about
@@ -61,11 +61,11 @@ export default function Index() {
 					className="absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2"
 				>
 					<div className="w-64 h-64">
-						<Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
+						{/* <Canvas camera={{ position: [5, 0, 0], fov: 30 }}>
 							<ambientLight />
 							<pointLight position={[0, 10, 0]} />
 							<ArtstationModel />
-						</Canvas>
+						</Canvas> */}
 					</div>
 					<div className="block text-cyan text-2xl font-mono text-center -translate-y-22">
 						artstation

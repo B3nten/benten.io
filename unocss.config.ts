@@ -1,4 +1,4 @@
-import { defineConfig, presetWind, presetWebFonts, presetAttributify} from "unocss";
+import { defineConfig, presetWind, presetWebFonts, presetAttributify, presetTypography } from "unocss";
 
 export default defineConfig({
 	presets: [
@@ -11,5 +11,6 @@ export default defineConfig({
 			},
 		}),
 		presetAttributify(),
+		presetTypography(),
 	],
 });
